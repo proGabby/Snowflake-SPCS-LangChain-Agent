@@ -1,0 +1,1 @@
+"""Configuration module for Snowflake SPCS LangChain Agent"""
