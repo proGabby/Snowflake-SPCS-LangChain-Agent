@@ -1,0 +1,120 @@
+version: '3.8'
+
+services:
+  # Snowflake LangChain Agent
+  snowflake-agent:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: snowflake-langchain-agent
+    ports:
+      - "8000:8000"  # API port
+      - "8001:8001"  # Metrics port
+    environment:
+      # Snowflake Configuration
+      - SNOWFLAKE_ACCOUNT=${SNOWFLAKE_ACCOUNT}
+      - SNOWFLAKE_USER=${SNOWFLAKE_USER}
+      - SNOWFLAKE_PASSWORD=${SNOWFLAKE_PASSWORD}
+      - SNOWFLAKE_WAREHOUSE=${SNOWFLAKE_WAREHOUSE}
+      - SNOWFLAKE_DATABASE=${SNOWFLAKE_DATABASE}
+      - SNOWFLAKE_SCHEMA=${SNOWFLAKE_SCHEMA}
+      - SNOWFLAKE_ROLE=${SNOWFLAKE_ROLE}
+      
+      # vLLM Configuration (pointing to mock service)
+      - VLLM_BASE_URL=http://mock-vllm:8000
+      - VLLM_MODEL_NAME=microsoft/DialoGPT-small
+      - VLLM_TIMEOUT=30
+      - VLLM_MAX_RETRIES=3
+      
+      # Auth Configuration
+      - SECRET_KEY=${SECRET_KEY:-your-secret-key-here}
+      - AUTH_ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=30
+      - ALLOWED_ORIGINS=http://localhost:3000,http://localhost:8000
+      - ALLOWED_METHODS=GET,POST,PUT,DELETE,OPTIONS
+      
+      # Monitoring Configuration
+      - METRICS_PORT=8001
+      - GRAFANA_BASE_URL=http://grafana:3000
+      - GRAFANA_API_KEY=${GRAFANA_API_KEY:-admin}
+      - GRAFANA_DASHBOARD_ID=${GRAFANA_DASHBOARD_ID:-1}
+      - GRAFANA_DATASOURCE_NAME=Prometheus
+      
+      # App Configuration
+      - LOG_LEVEL=INFO
+      - ENVIRONMENT=production
+    depends_on:
+      - mock-vllm
+      - prometheus
+    networks:
+      - monitoring_network
+    restart: unless-stopped
+
+  # Lightweight Mock vLLM Service
+  mock-vllm:
+    build:
+      context: .
+      dockerfile: Dockerfile.mock-vllm
+    container_name: mock-vllm-service
+    ports:
+      - "8002:8000"
+    networks:
+      - monitoring_network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
+
+  # Prometheus Metrics Server
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus-server
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    networks:
+      - monitoring_network
+    restart: unless-stopped
+
+  # Grafana Dashboard
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana-dashboard
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_INSTALL_PLUGINS=grafana-piechart-panel
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards
+    networks:
+      - monitoring_network
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+
+volumes:
+  prometheus_data:
+  grafana_data:
+  vllm_cache:
+
+networks:
+  monitoring_network:
+    driver: bridge
+

@@ -1,0 +1,295 @@
+# =============================================================================
+# Snowflake SPCS LangChain Agent - Git Ignore File
+# =============================================================================
+
+# =============================================================================
+# ENVIRONMENT & CONFIGURATION FILES
+# =============================================================================
+# Never commit actual environment files with secrets
+.env
+.env.local
+.env.production
+.env.staging
+.env.development
+*.env
+
+# Keep the example template
+!example.env
+
+# =============================================================================
+# PYTHON
+# =============================================================================
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+.env/
+
+# =============================================================================
+# IDES & EDITORS
+# =============================================================================
+# VSCode
+.vscode/
+*.code-workspace
+
+# PyCharm
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# =============================================================================
+# OPERATING SYSTEM
+# =============================================================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.tmp
+*.temp
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# =============================================================================
+# DOCKER
+# =============================================================================
+# Docker volumes and data
+docker-data/
+docker-volumes/
+.docker/
+
+# Docker Compose override files
+docker-compose.override.yml
+docker-compose.local.yml
+
+# =============================================================================
+# MONITORING & LOGS
+# =============================================================================
+# Log files
+*.log
+logs/
+log/
+
+# Prometheus data
+prometheus_data/
+prometheus/
+
+# Grafana data
+grafana_data/
+grafana/
+
+# Monitoring data
+monitoring-data/
+
+# =============================================================================
+# DATABASES & CACHES
+# =============================================================================
+# SQLite
+*.db
+*.sqlite
+*.sqlite3
+
+# Redis
+dump.rdb
+
+# Cache directories
+.cache/
+cache/
+
+# =============================================================================
+# SECURITY & KEYS
+# =============================================================================
+# SSH keys
+*.pem
+*.key
+*.crt
+*.csr
+*.p12
+*.pfx
+
+# GPG keys
+*.gpg
+*.asc
+
+# JWT secrets
+jwt_secret.txt
+auth_keys/
+
+# =============================================================================
+# TEMPORARY FILES
+# =============================================================================
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# =============================================================================
+# PROJECT SPECIFIC
+# =============================================================================
+# Model files and caches
+models/
+model_cache/
+*.model
+*.pkl
+*.joblib
+
+# Data files (if any)
+data/
+datasets/
+*.csv
+*.json
+*.parquet
+
+# Notebook checkpoints
+.ipynb_checkpoints/
+
+# Jupyter Notebook outputs
+*.ipynb
+
+# =============================================================================
+# DEPLOYMENT & CI/CD
+# =============================================================================
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# Kubernetes
+*.kubeconfig
+
+# CI/CD
+.github/workflows/secrets/
+.gitlab-ci-local/
+
+# =============================================================================
+# DOCUMENTATION
+# =============================================================================
+# Generated documentation
+docs/_build/
+site/
+
+# =============================================================================
+# MISC
+# =============================================================================
+# Node.js (if using any JS tools)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Coverage reports
+htmlcov/
+.coverage

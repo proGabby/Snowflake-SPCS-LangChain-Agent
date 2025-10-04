@@ -1,0 +1,33 @@
+# Core Framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# LangChain & Agent Framework
+langchain==0.1.0
+langchain-community==0.0.10
+langchain-core>=0.1.7
+langchain-openai==0.0.5
+
+# Snowflake Integration
+snowflake-connector-python==3.6.0
+snowflake-sqlalchemy==1.5.0
+
+# vLLM Integration
+httpx==0.25.2
+aiohttp==3.9.1
+
+# Monitoring & Metrics
+prometheus-client==0.19.0
+grafana-api==1.0.3
+
+# Authentication & Security
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.6
+
+# Utilities
+python-dotenv==1.0.0
+structlog==23.2.0
+tenacity==8.2.3
