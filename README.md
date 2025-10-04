@@ -2,7 +2,7 @@
 
 A containerized LangChain agent for Snowflake SPCS with vLLM integration, featuring comprehensive monitoring and security controls.
 
-## 🚀 Quick Start
+## Quick Start
 
 ### 1. Environment Setup
 
@@ -33,7 +33,7 @@ docker compose -f docker/docker-compose.lightweight.yml up --build -d
 docker compose -f docker/docker-compose.monitoring.yml up --build -d
 ```
 
-## 📊 Monitoring
+## Monitoring
 
 - **Application**: http://localhost:8000
 - **API Docs**: http://localhost:8000/docs
@@ -41,7 +41,7 @@ docker compose -f docker/docker-compose.monitoring.yml up --build -d
 - **Grafana**: http://localhost:3000 (admin/admin)
 - **Prometheus**: http://localhost:9090
 
-## 🔧 Configuration
+## Configuration
 
 ### Environment Variables
 
@@ -64,7 +64,7 @@ docker compose -f docker/docker-compose.monitoring.yml up --build -d
 - **Table restrictions**: Limit access to specific tables via `SNOWFLAKE_ALLOWED_TABLES`
 - **Row limits**: Maximum 10,000 rows per query (configurable)
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 ├── app/                    # Main application code
@@ -81,7 +81,7 @@ docker compose -f docker/docker-compose.monitoring.yml up --build -d
 └── README.md             # This file
 ```
 
-## 🔐 Security
+## Security
 
 - Environment files with secrets are ignored by Git
 - JWT-based authentication with configurable expiration
@@ -89,7 +89,7 @@ docker compose -f docker/docker-compose.monitoring.yml up --build -d
 - Rate limiting to prevent abuse
 - SQL injection protection through parameterized queries
 
-## 📈 API Endpoints
+## API Endpoints
 
 - `GET /` - Application status
 - `GET /health` - Health check
@@ -98,7 +98,7 @@ docker compose -f docker/docker-compose.monitoring.yml up --build -d
 - `GET /tables/{table}/schema` - Get table schema
 - `GET /status` - Agent configuration status
 
-## 🛠️ Development
+## Development
 
 ### Adding New Features
 
