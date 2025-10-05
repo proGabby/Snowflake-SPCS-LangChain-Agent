@@ -112,6 +112,9 @@ Provide clear, actionable insights based on the data you retrieve."""
                 tool_call_pattern = r'TOOL_CALL:\s*(\w+)\((.*?)\)(?=\s*TOOL_CALL:|$)'
                 tool_calls = re.findall(tool_call_pattern, response_content, re.DOTALL)
                 
+                # Clear the response content to remove TOOL_CALL prefixes
+                response_content = ""
+                
                 for tool_name, args in tool_calls:
                     try:
                         if tool_name == "get_table_names":
@@ -131,11 +134,23 @@ Provide clear, actionable insights based on the data you retrieve."""
                         else:
                             result = f"Unknown tool: {tool_name}"
                         
-                        # Add tool result to response
-                        response_content += f"\n\n{result}"
+                        # Add tool result to response with cleaner formatting
+                        if "Query result:" in result:
+                            # Extract just the data part for cleaner display
+                            data_part = result.split("Query result:")[1].strip()
+                            response_content += f"{data_part}\n\n"
+                        elif "Query returned" in result:
+                            # Extract just the data part for cleaner display
+                            data_part = result.split("Query returned")[1].strip()
+                            response_content += f"{data_part}\n\n"
+                        else:
+                            response_content += f"{result}\n\n"
                         
                     except Exception as e:
-                        response_content += f"\n\nTool Error: {str(e)}"
+                        response_content += f"Tool Error: {str(e)}\n\n"
+                
+                # Clean up trailing newlines
+                response_content = response_content.strip()
             
             # Update memory
             self.memory.chat_memory.add_user_message(query)
@@ -186,6 +201,7 @@ Provide clear, actionable insights based on the data you retrieve."""
         # LangChain's memory is typically cleared per session or managed differently
         self.memory.clear()
         return True
+
 
 
 # Global LangChain agent instance
