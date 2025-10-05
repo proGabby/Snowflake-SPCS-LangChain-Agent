@@ -131,13 +131,8 @@ Provide clear, actionable insights based on the data you retrieve."""
                         else:
                             result = f"Unknown tool: {tool_name}"
                         
-                        # Add tool result to response with better formatting
-                        if "Query result:" in result:
-                            # Extract just the data part for cleaner display
-                            data_part = result.split("Query result:")[1].strip()
-                            response_content += f"\n\n{data_part}"
-                        else:
-                            response_content += f"\n\n{result}"
+                        # Add tool result to response
+                        response_content += f"\n\n{result}"
                         
                     except Exception as e:
                         response_content += f"\n\nTool Error: {str(e)}"
