@@ -65,12 +65,27 @@ class SnowflakeSecurityValidator:
         """Add safety limits to SELECT queries"""
         query_upper = query.upper().strip()
         
-        # Add LIMIT if not present and it's a SELECT query
-        if query_upper.startswith('SELECT') and 'LIMIT' not in query_upper:
-            # Handle ORDER BY clause
+        # Skip safety limits for system queries and aggregation queries
+        skip_conditions = [
+            'COUNT(' in query_upper,
+            'SUM(' in query_upper, 
+            'AVG(' in query_upper,
+            'MIN(' in query_upper,
+            'MAX(' in query_upper,
+            'INFORMATION_SCHEMA' in query_upper,  # Skip schema queries
+            'SHOW ' in query_upper,  # Skip SHOW commands
+            'DESCRIBE ' in query_upper,  # Skip DESCRIBE commands
+            'LIMIT' in query_upper  # Already has LIMIT
+        ]
+        
+        # Add LIMIT if not present and it's a SELECT query (but not system/aggregation queries)
+        if (query_upper.startswith('SELECT') and not any(skip_conditions)):
+            # Handle ORDER BY clause - use regex for more precise replacement
+            import re
             if 'ORDER BY' in query_upper:
-                # Insert LIMIT before ORDER BY
-                query = query.replace('ORDER BY', f'LIMIT {self.max_rows} ORDER BY')
+                # Use regex to find ORDER BY and insert LIMIT before it
+                pattern = r'(\s+ORDER\s+BY\s+)'
+                query = re.sub(pattern, f' LIMIT {self.max_rows} \\1', query, flags=re.IGNORECASE)
             else:
                 # Add LIMIT at the end
                 query = f"{query.rstrip(';')} LIMIT {self.max_rows}"

@@ -17,9 +17,10 @@ services:
       - SNOWFLAKE_SCHEMA=${SNOWFLAKE_SCHEMA}
       - SNOWFLAKE_ROLE=${SNOWFLAKE_ROLE}
       
-      # vLLM Configuration (pointing to mock service)
-      - VLLM_BASE_URL=http://mock-vllm:8000
-      - VLLM_MODEL_NAME=microsoft/DialoGPT-small
+      # Gemini API Configuration
+      - VLLM_BASE_URL=https://generativelanguage.googleapis.com/v1beta
+      - VLLM_MODEL_NAME=gemini-2.5-flash
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
       - VLLM_TIMEOUT=30
       - VLLM_MAX_RETRIES=3
       
@@ -33,32 +34,12 @@ services:
       # App Configuration
       - LOG_LEVEL=INFO
       - ENVIRONMENT=development
-    depends_on:
-      - mock-vllm
+    # No dependencies - using Gemini API
     networks:
       - snowflake_llm_network
     restart: unless-stopped
 
-  # Lightweight Mock vLLM Service
-  mock-vllm:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile.mock-vllm
-    container_name: mock-vllm-service
-    ports:
-      - "8001:8000"
-    networks:
-      - snowflake_llm_network
-    restart: unless-stopped
-    deploy:
-      resources:
-        limits:
-          memory: 512M
-        reservations:
-          memory: 256M
-
-volumes:
-  vllm_cache:
+  # Using Gemini API - no local container needed
 
 networks:
   snowflake_llm_network:

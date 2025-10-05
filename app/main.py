@@ -12,7 +12,7 @@ from typing import Dict, List, Any, Optional
 
 from app.config.settings import config
 from app.auth.security import get_current_user, check_rate_limit, get_cors_config
-from app.agent.simple_agent import simple_agent as snowflake_agent
+from app.agent.langchain_agent import langchain_agent as snowflake_agent
 from app.integrations.metrics import metrics_collector, grafana_integration
 from app.models.schemas import (
     QueryRequest, QueryResponse, ConversationMetrics,
@@ -152,7 +152,7 @@ async def health_check():
 async def get_agent_status(current_user: dict = Depends(get_current_user)):
     """Get agent status and configuration"""
     return AgentStatus(
-        agent_type="LangChain Snowflake Agent",
+        agent_type="Real LangChain Snowflake Agent with Tools",
         model=config.vllm.model_name,
         max_conversation_history=config.max_conversation_history,
         allowed_tables=config.snowflake.get_allowed_tables_list(),
